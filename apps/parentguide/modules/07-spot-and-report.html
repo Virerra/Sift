@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Spot it, report it — SIFT Parent Guide</title>
+<link rel="stylesheet" href="../assets/style.css" />
+<style>
+  .flag-table { width: 100%; border-collapse: collapse; margin: 16px 0; }
+  .flag-table th, .flag-table td { border: 1px solid var(--line); padding: 8px 12px; text-align: left; font-size: 13.5px; vertical-align: top; }
+  .flag-table th { background: var(--ink); color: var(--paper); }
+</style>
+</head>
+<body data-module="spot-and-report">
+  <nav class="site-nav">
+    <a href="../index.html" class="brand">
+      <span>SIFT</span>
+      <svg viewBox="0 0 100 70" aria-hidden="true">
+        <rect x="4" y="4" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="20" y="16" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="36" y="28" width="60" height="42" fill="none" stroke="#111111" stroke-width="4"/>
+      </svg>
+    </a>
+    <div class="nav-progress">
+      <span data-ring-label>0%</span>
+      <svg class="ring" data-ring-for="spot-and-report" viewBox="0 0 30 30">
+        <circle class="track" cx="15" cy="15" r="12"/>
+        <circle class="fill" cx="15" cy="15" r="12"/>
+      </svg>
+    </div>
+  </nav>
+
+  <main class="wrap" style="padding-top:48px;">
+    <p class="eyebrow reveal is-visible">Module 07</p>
+    <div class="chapter-mark reveal is-visible">
+      <span class="num">07</span>
+      <span class="title">Spot it, report it</span>
+    </div>
+    <p class="lede reveal is-visible">
+      The practical payoff of everything before this. What to actually
+      watch for, and exactly where a report goes — both to the platform,
+      and to SIFT.
+    </p>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="checklist">
+      <h2>The quick mental checklist</h2>
+      <div class="card">
+        <p style="margin:0 0 10px"><strong>Fake urgency or fake prizes</strong> — "only 2 left," "you've been selected," language built to skip a considered decision.</p>
+        <p style="margin:0 0 10px"><strong>Age-restricted products on kid content</strong> — gambling, dating apps, alcohol, vaping, "get rich quick" schemes.</p>
+        <p style="margin:0"><strong>Anything that just feels wrong</strong> — you don't need to name why before it's worth reporting. Trust it.</p>
+      </div>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="flag-meanings">
+      <h2>What AdSentinel's flags mean</h2>
+      <table class="flag-table">
+        <tr><th>Flag</th><th>What it means</th></tr>
+        <tr><td>Dark pattern</td><td>Ad copy matches known manipulative marketing phrasing.</td></tr>
+        <tr><td>Age-restricted category</td><td>Ad copy matches a category that's age-restricted in most places.</td></tr>
+        <tr><td>Unverified network</td><td>Served from an ad-tech domain not on the known-network list — not proof of anything by itself, just unfamiliar.</td></tr>
+        <tr><td>No accessible text</td><td>The ad has no alt text or label, so nothing else could even run.</td></tr>
+        <tr><td>Needs your review</td><td>An image-only ad on a page that looks built for kids — AdSentinel stops and asks a person to look.</td></tr>
+      </table>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="report-platform">
+      <p class="tag-pill">Report #1</p>
+      <h2>Report it to the platform directly</h2>
+      <p>This is the report that can actually get a specific ad taken down. Usually behind a small "···" menu on the ad itself.</p>
+      <ul>
+        <li>YouTube: the "···" menu on the ad, or <a href="https://support.google.com/google-ads/answer/7660847">Google's ad complaint form</a></li>
+        <li>Facebook / Instagram: the "···" menu on the ad → Report ad</li>
+        <li>TikTok: tap and hold the ad, or use the flag icon on it</li>
+      </ul>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="report-sift">
+      <p class="tag-pill navy">Report #2</p>
+      <h2>Report it to SIFT</h2>
+      <p>
+        This doesn't take the ad down — it's what turns one "this seemed
+        off" into a pattern other people can see. Use AdSentinel's
+        <strong>Export</strong> button, then open an issue with the
+        <a href="https://github.com/Virerra/Sift/blob/main/.github/ISSUE_TEMPLATE/ad-report.md">ad report template</a>
+        and attach the export. A GitHub login is the only account this
+        needs, and only for this specific step.
+      </p>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="what-happens-next">
+      <h2>What actually happens after you report</h2>
+      <p>
+        Worth setting expectations honestly: platforms review reports, but
+        review doesn't guarantee removal — plenty of reported ads are
+        judged compliant and stay up. SIFT's issue tracker isn't a
+        takedown mechanism either; it's how the heuristics ruleset gets
+        better over time, and how AdDashboard's aggregate picture gets
+        more accurate. Neither replaces the other — a report worth making
+        is usually worth making in both places.
+      </p>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <nav style="display:flex; justify-content:space-between; margin-bottom:20px;">
+      <a href="06-using-sift.html" class="btn btn-secondary">← Back</a>
+      <a href="../index.html" class="btn btn-primary">Back to the guide overview →</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>Part of the <a href="https://github.com/Virerra/Sift">SIFT project</a> — open source, MIT licensed.</p>
+  </footer>
+
+  <script src="../assets/progress.js"></script>
+</body>
+</html>

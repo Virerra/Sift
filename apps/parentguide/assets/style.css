@@ -1,0 +1,274 @@
+/* SIFT ParentGuide — shared design system
+   Brand constraints stay fixed: black/white/navy, Arial Black wordmark,
+   clinical over decorative. What's new here (borrowed and adapted, not
+   copied, from the references we looked at): uppercase monospace eyebrow
+   labels, huge numbered chapter markers, thin rule dividers, soft
+   shadowed cards, and scroll-triggered reveals — none of which need
+   color to work, so none of it fights the brand. */
+
+:root {
+  --ink: #111111;
+  --navy: #0b1f3a;
+  --paper: #ffffff;
+  --paper-2: #f7f7f5;
+  --line: #d9d9d9;
+  --line-strong: #111111;
+  --muted: #5a5a5a;
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: Arial, Helvetica, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* ---------- Top nav, shared across every page ---------- */
+
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--line);
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-nav .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.site-nav .brand span {
+  font-family: "Arial Black", Arial, sans-serif;
+  font-weight: 900;
+  font-size: 20px;
+  letter-spacing: 0.3px;
+}
+
+.site-nav .brand svg { width: 26px; height: 18px; }
+
+.nav-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+.nav-progress .ring { width: 26px; height: 26px; }
+
+/* ---------- Eyebrow labels ---------- */
+
+.eyebrow {
+  font-family: "Courier New", Courier, monospace;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  font-size: 12px;
+  color: var(--muted);
+  display: inline-block;
+  margin-bottom: 10px;
+}
+
+/* ---------- Chapter number treatment ---------- */
+
+.chapter-mark {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  margin-bottom: 8px;
+}
+
+.chapter-mark .num {
+  font-family: "Arial Black", Arial, sans-serif;
+  font-weight: 900;
+  font-size: 64px;
+  line-height: 1;
+  color: var(--ink);
+}
+
+.chapter-mark .title {
+  font-family: "Arial Black", Arial, sans-serif;
+  font-weight: 900;
+  font-size: 32px;
+  line-height: 1.1;
+}
+
+/* ---------- Layout ---------- */
+
+.wrap {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.rule {
+  border: none;
+  border-top: 1px solid var(--line);
+  margin: 40px 0;
+}
+
+/* ---------- Scroll reveal ---------- */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Cards ---------- */
+
+.card {
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 22px 24px;
+  margin: 20px 0;
+}
+
+.card.callout {
+  box-shadow: var(--shadow);
+  border-color: transparent;
+  background: var(--paper);
+}
+
+.card h3 {
+  margin-top: 0;
+  font-size: 16px;
+}
+
+.tag-pill {
+  display: inline-block;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding: 4px 10px;
+  border-radius: 100px;
+  margin-bottom: 10px;
+}
+
+.tag-pill.navy { background: var(--navy); }
+
+/* ---------- Buttons ---------- */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: 2px solid var(--ink);
+  cursor: pointer;
+  text-decoration: none;
+  transition: transform 0.2s var(--ease), background 0.2s;
+}
+
+.btn-primary {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-primary:hover { transform: translateY(-2px); background: #2b2b2b; }
+
+.btn-secondary {
+  background: var(--paper);
+  color: var(--ink);
+}
+.btn-secondary:hover { transform: translateY(-2px); background: var(--paper-2); }
+
+.btn[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ---------- Progress rings ---------- */
+
+.ring {
+  transform: rotate(-90deg);
+}
+.ring circle {
+  fill: none;
+  stroke-width: 3;
+}
+.ring .track { stroke: var(--line); }
+.ring .fill {
+  stroke: var(--navy);
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s var(--ease);
+}
+
+/* ---------- Section complete check ---------- */
+
+.section-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 28px;
+}
+
+.section-status .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1.5px solid var(--muted);
+  transition: background 0.3s, border-color 0.3s;
+}
+
+.section-status.done .dot {
+  background: var(--navy);
+  border-color: var(--navy);
+}
+
+/* ---------- Footer ---------- */
+
+.site-footer {
+  max-width: 780px;
+  margin: 60px auto 0;
+  padding: 24px 24px 50px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--muted);
+}
+
+/* ---------- Typography ---------- */
+
+h1, h2, h3 { font-family: Arial, sans-serif; }
+p { color: #222; }
+
+.lede {
+  font-size: 19px;
+  line-height: 1.6;
+  color: var(--ink);
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Welcome to SIFT — Parent Guide</title>
+<link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body data-module="welcome">
+  <nav class="site-nav">
+    <a href="../index.html" class="brand">
+      <span>SIFT</span>
+      <svg viewBox="0 0 100 70" aria-hidden="true">
+        <rect x="4" y="4" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="20" y="16" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="36" y="28" width="60" height="42" fill="none" stroke="#111111" stroke-width="4"/>
+      </svg>
+    </a>
+    <div class="nav-progress">
+      <span data-ring-label>0%</span>
+      <svg class="ring" data-ring-for="welcome" viewBox="0 0 30 30">
+        <circle class="track" cx="15" cy="15" r="12"/>
+        <circle class="fill" cx="15" cy="15" r="12"/>
+      </svg>
+    </div>
+  </nav>
+
+  <main class="wrap" style="padding-top:48px;">
+    <p class="eyebrow reveal is-visible">Module 01</p>
+    <div class="chapter-mark reveal is-visible">
+      <span class="num">01</span>
+      <span class="title">Welcome to SIFT</span>
+    </div>
+    <p class="lede reveal is-visible">
+      Three short things before the rest of the guide: what SIFT actually
+      is, what the next six modules cover, and — since this page tracks
+      your reading — exactly what that means for your privacy.
+    </p>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="what-is-sift">
+      <h2>What SIFT is</h2>
+      <p>
+        SIFT is a small set of open-source tools built around one idea:
+        you should be able to see what ads are actually being shown to
+        kids online, not just trust that platforms are handling it. The
+        first piece, <strong>AdSentinel</strong>, is a browser extension
+        that scans the ads on a page and flags ones matching known
+        manipulative or age-inappropriate patterns — with a plain-English
+        reason for every flag, and nothing sent anywhere unless you choose
+        to share it.
+      </p>
+      <div class="card">
+        <h3>Worth knowing going in</h3>
+        <p style="margin-bottom:0">
+          AdSentinel reads text — an ad's copy, its labels, which network
+          served it. It cannot look at an ad's actual image or video. A
+          clean scan means nothing text-based tripped a rule; it's not a
+          guarantee the ad is fine. Module 06 covers this in more depth.
+        </p>
+      </div>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="whats-ahead">
+      <h2>What's ahead</h2>
+      <p>The next six modules, in order:</p>
+      <div class="card">
+        <p style="margin:0 0 8px"><strong>02 · Internet safety basics</strong> — the general stuff, not SIFT-specific: passwords, oversharing, screen time, who kids talk to.</p>
+        <p style="margin:0 0 8px"><strong>03 · Digital citizenship &amp; etiquette</strong> — how kids treat others online, and how what they post follows them.</p>
+        <p style="margin:0 0 8px"><strong>04 · How advertising targets kids</strong> — the actual mechanics: dark patterns, targeting, algorithmic feeds.</p>
+        <p style="margin:0 0 8px"><strong>05 · Ad policies &amp; your rights</strong> — what's technically not allowed, in plain language, not legal advice.</p>
+        <p style="margin:0 0 8px"><strong>06 · Using SIFT's tools</strong> — a real walkthrough of AdSentinel, and what AuditTool and AdDashboard add.</p>
+        <p style="margin:0"><strong>07 · Spot it, report it</strong> — the practical guide: what to watch for, and exactly where to send a report.</p>
+      </div>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="how-tracking-works">
+      <h2>How this page tracks your progress</h2>
+      <p>
+        Each module is broken into a few sections, like this one. As you
+        read — genuinely read, not just scroll past — a small dot fills in
+        next to the section, and the ring in the corner fills in to match.
+      </p>
+      <p>
+        All of that lives in your browser's local storage, under one key
+        namespaced to this site. It never leaves your device: no account,
+        no server, nothing sent to SIFT. Clearing your browser data clears
+        this progress too — there's nothing to recover, by design.
+      </p>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <nav style="display:flex; justify-content:space-between; margin-bottom:20px;">
+      <span></span>
+      <a href="02-safety-basics.html" class="btn btn-primary">Next: Internet safety basics →</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>Part of the <a href="https://github.com/Virerra/Sift">SIFT project</a> — open source, MIT licensed.</p>
+  </footer>
+
+  <script src="../assets/progress.js"></script>
+</body>
+</html>

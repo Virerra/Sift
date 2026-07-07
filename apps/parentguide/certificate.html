@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Your certificate — SIFT Parent Guide</title>
+<link rel="stylesheet" href="assets/style.css" />
+<style>
+  .cert-wrap { padding: 48px 24px 80px; max-width: 780px; margin: 0 auto; }
+  .name-row { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0 28px; }
+  .name-row input {
+    flex: 1;
+    min-width: 220px;
+    padding: 12px 14px;
+    border: 2px solid var(--ink);
+    border-radius: 8px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+  }
+  #cert-canvas {
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+  }
+  .locked-state { text-align: center; padding: 60px 20px; }
+  .locked-state .big { font-size: 48px; margin-bottom: 8px; }
+</style>
+</head>
+<body>
+  <nav class="site-nav">
+    <a href="index.html" class="brand">
+      <span>SIFT</span>
+      <svg viewBox="0 0 100 70" aria-hidden="true">
+        <rect x="4" y="4" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="20" y="16" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="36" y="28" width="60" height="42" fill="none" stroke="#111111" stroke-width="4"/>
+      </svg>
+    </a>
+    <div class="nav-progress">
+      <span data-ring-label>0%</span>
+      <svg class="ring" data-ring-for="overall" viewBox="0 0 30 30">
+        <circle class="track" cx="15" cy="15" r="12"/>
+        <circle class="fill" cx="15" cy="15" r="12"/>
+      </svg>
+    </div>
+  </nav>
+
+  <main class="cert-wrap">
+    <div id="locked" class="locked-state" hidden>
+      <div class="big">🔒</div>
+      <h2>Finish all seven modules first</h2>
+      <p>Your certificate unlocks once every module reads 100%. Head back to the guide and pick up where you left off.</p>
+      <a href="index.html" class="btn btn-primary">Back to the guide</a>
+    </div>
+
+    <div id="unlocked" hidden>
+      <p class="eyebrow">Certificate</p>
+      <h1>You've completed the SIFT Parent Guide</h1>
+      <p class="lede">Type the name you'd like on it, then download. This image is generated on your device — nothing is uploaded.</p>
+
+      <div class="name-row">
+        <input type="text" id="name-input" placeholder="Name to print on the certificate" maxlength="60" />
+        <button class="btn btn-secondary" id="update-btn">Update preview</button>
+      </div>
+
+      <canvas id="cert-canvas" width="1200" height="850"></canvas>
+
+      <div style="margin-top:24px; display:flex; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-primary" id="download-btn">Download PNG</button>
+        <a href="index.html" class="btn btn-secondary">Back to the guide</a>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Part of the <a href="https://github.com/Virerra/Sift">SIFT project</a> — open source, MIT licensed.</p>
+  </footer>
+
+  <script src="assets/progress.js"></script>
+  <script src="assets/certificate.js"></script>
+  <script>
+    const { isComplete, loadState, saveState } = window.SIFTProgress;
+    const lockedEl = document.getElementById("locked");
+    const unlockedEl = document.getElementById("unlocked");
+
+    if (!isComplete()) {
+      lockedEl.hidden = false;
+    } else {
+      unlockedEl.hidden = false;
+
+      const canvas = document.getElementById("cert-canvas");
+      const nameInput = document.getElementById("name-input");
+      const today = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+
+      const state = loadState();
+      nameInput.value = state.name || "";
+
+      function render() {
+        window.SIFTCertificate.drawCertificate(canvas, { name: nameInput.value, date: today });
+      }
+
+      render();
+
+      document.getElementById("update-btn").addEventListener("click", () => {
+        const s = loadState();
+        s.name = nameInput.value;
+        saveState(s);
+        render();
+      });
+
+      document.getElementById("download-btn").addEventListener("click", () => {
+        window.SIFTCertificate.downloadCanvasAsPng(canvas, "sift-parentguide-certificate.png");
+      });
+    }
+  </script>
+</body>
+</html>

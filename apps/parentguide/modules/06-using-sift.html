@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Using SIFT's tools — Parent Guide</title>
+<link rel="stylesheet" href="../assets/style.css" />
+</head>
+<body data-module="using-sift">
+  <nav class="site-nav">
+    <a href="../index.html" class="brand">
+      <span>SIFT</span>
+      <svg viewBox="0 0 100 70" aria-hidden="true">
+        <rect x="4" y="4" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="20" y="16" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="36" y="28" width="60" height="42" fill="none" stroke="#111111" stroke-width="4"/>
+      </svg>
+    </a>
+    <div class="nav-progress">
+      <span data-ring-label>0%</span>
+      <svg class="ring" data-ring-for="using-sift" viewBox="0 0 30 30">
+        <circle class="track" cx="15" cy="15" r="12"/>
+        <circle class="fill" cx="15" cy="15" r="12"/>
+      </svg>
+    </div>
+  </nav>
+
+  <main class="wrap" style="padding-top:48px;">
+    <p class="eyebrow reveal is-visible">Module 06</p>
+    <div class="chapter-mark reveal is-visible">
+      <span class="num">06</span>
+      <span class="title">Using SIFT's tools</span>
+    </div>
+    <p class="lede reveal is-visible">
+      A real walkthrough, not a features list. Where each piece actually
+      stands right now, honestly — some of this is further along than
+      the rest.
+    </p>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="loading">
+      <p class="tag-pill">Step one</p>
+      <h2>Loading AdSentinel</h2>
+      <p>
+        AdSentinel isn't on the Chrome Web Store yet — right now it's
+        loaded as an unpacked extension, which sounds more technical than
+        it is: download the repository, open
+        <code>chrome://extensions</code>, turn on Developer mode top
+        right, click <strong>Load unpacked</strong>, and select the
+        <code>apps/adsentinel</code> folder. Full steps are in that app's
+        own README if any of that's unfamiliar.
+      </p>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="manual-scan">
+      <p class="tag-pill">Manual scan</p>
+      <h2>Scanning a page</h2>
+      <p>
+        Click the SIFT icon in your toolbar, then <strong>Scan this
+        page</strong>. Every flagged ad shows up with its type — dark
+        pattern, age-restricted category, unverified network, no
+        accessible text — and a plain-English reason underneath it, not
+        just a label. Zero flags doesn't mean the page is clean; it means
+        nothing text-based tripped a rule (Module 01 covers this
+        limitation, worth re-reading if you skipped it).
+      </p>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="auto-watch">
+      <p class="tag-pill">Auto-watch</p>
+      <h2>The automatic toast on YouTube</h2>
+      <p>
+        On YouTube specifically, AdSentinel also watches for video ads
+        without you clicking anything — a small notice slides in from the
+        corner the moment one starts playing, evaluated the same way a
+        manual scan would be. This only runs on YouTube, Facebook,
+        Instagram, and TikTok — the four domains AdSentinel explicitly
+        asks permission for, and nowhere else.
+      </p>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="export-share">
+      <p class="tag-pill">Sharing</p>
+      <h2>Export, and Share to AdDashboard</h2>
+      <p>
+        After a scan with flags, two separate things become available.
+        <strong>Export</strong> saves the full result — including ad text
+        — to a file on your own machine; nothing about that leaves your
+        browser. <strong>Share to AdDashboard</strong> is a second,
+        separate opt-in button that sends a much narrower slice —
+        which platform, which flag types, nothing else — to the public
+        aggregate statistics covered in the next module's cousin,
+        AdDashboard.
+      </p>
+      <div class="card">
+        <h3>Why two different buttons</h3>
+        <p style="margin-bottom:0">
+          Export is for you. Share is for everyone else, and deliberately
+          can't carry your data with it — see
+          <code>packages/schema/report.js</code> in the repository if
+          you want the exact reasoning in code-comment form.
+        </p>
+      </div>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <section class="reveal" data-track="rest-of-sift">
+      <p class="tag-pill">Beyond AdSentinel</p>
+      <h2>AuditTool and AdDashboard</h2>
+      <p>
+        <strong>AdDashboard</strong> is real and running — a public page
+        showing aggregate counts by platform and category from everyone
+        who's clicked Share. <strong>AuditTool</strong>, a version of the
+        same detection engine meant for platforms or researchers to run
+        against a bulk ad inventory rather than a single page, is on the
+        roadmap but not built yet. If a link to it ever shows up here
+        before it exists, that's a documentation bug — worth reporting the
+        same way as anything else in Module 07.
+      </p>
+      <div class="section-status"><span class="dot"></span> Tracked automatically as you read</div>
+    </section>
+
+    <hr class="rule" />
+
+    <nav style="display:flex; justify-content:space-between; margin-bottom:20px;">
+      <a href="05-ad-policies.html" class="btn btn-secondary">← Back</a>
+      <a href="07-spot-and-report.html" class="btn btn-primary">Next: Spot it, report it →</a>
+    </nav>
+  </main>
+
+  <footer class="site-footer">
+    <p>Part of the <a href="https://github.com/Virerra/Sift">SIFT project</a> — open source, MIT licensed.</p>
+  </footer>
+
+  <script src="../assets/progress.js"></script>
+</body>
+</html>

@@ -15,7 +15,7 @@ is being served.
 | [AdSentinel](apps/adsentinel) | Browser extension, scans ads on the current page | In progress |
 | [AdDashboard](apps/addashboard) | Next.js app on Vercel, aggregates opt-in reports into public stats | Built, not yet deployed |
 | AuditTool | CLI/library version of the detection engine for bulk scanning | Planned |
-| [ParentGuide](apps/parentguide) | Static site on GitHub Pages — what to look for, how to report | Built, not yet deployed |
+| [ParentGuide](apps/parentguide) | Static site on GitHub Pages — 7-module self-paced guide with progress tracking and a certificate | Built, not yet deployed |
 
 Phases ship in order. AdSentinel shipped before AdDashboard started.
 
