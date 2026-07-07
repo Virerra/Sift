@@ -72,7 +72,13 @@
 
   function extractRecord(el) {
     const isIframe = el.tagName === "IFRAME";
-    const host = isIframe ? hostFromSrc(el.src) : window.location.host;
+    // Network-reputation only means something for third-party iframe ads.
+    // A native/same-page element's "host" would just be this page's own
+    // domain — not a meaningful signal, and it would flag literally every
+    // native ad regardless of content. Leave it null for non-iframes so
+    // evaluateAd's unverified-network check only fires where it's actually
+    // informative.
+    const host = isIframe ? hostFromSrc(el.src) : null;
 
     let text = "";
     try {

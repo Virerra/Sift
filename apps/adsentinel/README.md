@@ -118,11 +118,34 @@ real Phase 1.5 milestone rather than folding it into the heuristics file.
   category ads are still surfaced even off a child-directed page for that
   reason — see the reason string in `heuristics.js`.
 
+## Testing
+
+Two layers, catching two different kinds of breakage:
+
+```
+cd apps/adsentinel
+npm test                          # automated, no browser — pure heuristics logic
+```
+
+Then for the DOM/detection side, which genuinely needs a browser:
+
+```
+cd test/fixtures
+python3 -m http.server 8000
+```
+
+Visit `http://localhost:8000/test-page.html`, scan it with AdSentinel, and
+compare the popup's output against the expected-flags table printed on the
+page itself.
+
+`npm test` catches "someone changed a rule and broke an existing case."
+The fixture page catches "a DOM selector stopped matching." Neither
+substitutes for the other — the unit tests know nothing about the DOM, and
+the fixture page doesn't pin down exact reason strings the way an assertion
+does.
+
 ## Next in Phase 1
 
-- Add a small test page (`test/fixtures/`) with known dark-pattern and
-  category ads so the ruleset has a regression harness before Phase 2 starts
-  consuming its output
 - Facebook, Instagram, and TikTok watchers — `platform-watcher.js` is
   structured to add these as additional `if (host.endsWith(...))` branches;
   each needs its own DOM investigation first, YouTube's approach won't

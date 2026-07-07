@@ -1,0 +1,10 @@
+{
+  "name": "adsentinel",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "SIFT Phase 1 — browser extension that scans ads for manipulative and age-inappropriate patterns",
+  "scripts": {
+    "test": "node --test"
+  }
+}

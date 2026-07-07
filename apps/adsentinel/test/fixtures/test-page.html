@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>AdSentinel test fixture</title>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 720px; margin: 40px auto; line-height: 1.5; }
+  .case { border: 1px solid #ccc; border-left: 4px solid #0b1f3a; padding: 12px 16px; margin-bottom: 16px; }
+  .case h3 { margin: 0 0 4px; font-size: 14px; }
+  .expect { font-size: 12.5px; color: #555; margin: 0 0 10px; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 24px; }
+  td, th { border: 1px solid #ccc; padding: 6px 10px; text-align: left; font-size: 13px; }
+  .ad-fake { border: 1px dashed #999; padding: 8px; background: #fafafa; }
+</style>
+</head>
+<body>
+
+<h1>AdSentinel test fixture</h1>
+<p>
+  Serve this directory locally (<code>python3 -m http.server 8000</code> from
+  <code>test/fixtures/</code>, then visit
+  <code>http://localhost:8000/test-page.html</code> — the manual scan flow
+  requires <code>http://</code>/<code>https://</code>, not <code>file://</code>).
+  Click AdSentinel's icon, hit <strong>Scan this page</strong>, and compare
+  the popup's flag list against the expected column below. Any mismatch
+  means a rule or a selector changed — check <code>lib/detector.js</code>
+  and <code>lib/heuristics.js</code> before assuming the fixture is wrong.
+</p>
+
+<table>
+  <tr><th>Case</th><th>Expected flags</th></tr>
+  <tr><td>1. Clean sponsored post</td><td><em>none</em> — proves the ruleset doesn't over-flag</td></tr>
+  <tr><td>2. Fake urgency copy</td><td>Dark pattern</td></tr>
+  <tr><td>3. Gambling category</td><td>Age-restricted category (gambling)</td></tr>
+  <tr><td>4. Known network, labeled</td><td><em>none</em> — known host + accessible text</td></tr>
+  <tr><td>5. Unknown network, unlabeled</td><td>Unverified network + No accessible text</td></tr>
+  <tr><td>6. Native ad, no text at all</td><td>No accessible text</td></tr>
+</table>
+<p><strong>Total expected: 6 ads found, 4 flagged</strong> (cases 1 and 4 should be clean).</p>
+
+<div class="case">
+  <h3>1. Clean sponsored post</h3>
+  <p class="expect">Expected: no flags</p>
+  <div class="ad-fake" data-ad aria-label="Sponsored">
+    Sponsored: new running shoes just launched — shop the collection.
+  </div>
+</div>
+
+<div class="case">
+  <h3>2. Fake urgency copy</h3>
+  <p class="expect">Expected: Dark pattern</p>
+  <div class="ad-fake" data-ad aria-label="Sponsored">
+    Only 2 left! Act now before this deal disappears.
+  </div>
+</div>
+
+<div class="case">
+  <h3>3. Gambling category</h3>
+  <p class="expect">Expected: Age-restricted category (gambling)</p>
+  <div class="ad-fake" data-ad aria-label="Sponsored">
+    Best online casino jackpot slots — play free today.
+  </div>
+</div>
+
+<div class="case">
+  <h3>4. Known network, labeled</h3>
+  <p class="expect">Expected: no flags (known host, has a title so it's not "no accessible text")</p>
+  <iframe class="ad-fake" title="Advertisement" src="https://securepubads.g.doubleclick.net/gampad/ads" width="300" height="60"></iframe>
+</div>
+
+<div class="case">
+  <h3>5. Unknown network, unlabeled</h3>
+  <p class="expect">Expected: Unverified network + No accessible text</p>
+  <iframe id="ad-slot-unknown" src="https://fake-ads-network.example/ad-slot" width="300" height="60"></iframe>
+</div>
+
+<div class="case">
+  <h3>6. Native ad, no text at all</h3>
+  <p class="expect">Expected: No accessible text</p>
+  <div class="ad-fake" data-ad></div>
+</div>
+
+<script>
+  // Case 4 points at a real doubleclick.net ad-serving path — that's
+  // deliberate, it's the only way to exercise the "known network" branch
+  // for real, and loading it is exactly as harmless as any webpage with
+  // real ads. Case 5 points at fake-ads-network.example — .example is an
+  // IANA-reserved TLD that's guaranteed to never resolve, so that request
+  // fails fast and goes nowhere. detector.js only ever reads the `src`
+  // attribute string to resolve a hostname; neither iframe needs to
+  // actually finish loading for the detection logic to run correctly.
+</script>
+</body>
+</html>

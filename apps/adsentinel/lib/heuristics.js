@@ -116,6 +116,9 @@ export function evaluateAd(ad, { childDirectedPage } = {}) {
     }
   }
 
+  // ad.host is only ever set for iframe ads (see detector.js) — native
+  // same-page elements have no meaningful "network" to check, so they
+  // fall through here without triggering this flag, by design.
   if (ad.host && !AD_NETWORK_HOSTS.some((known) => ad.host.endsWith(known))) {
     flags.push({
       type: FLAG_TYPES.UNKNOWN_NETWORK,
