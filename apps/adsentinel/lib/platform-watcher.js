@@ -26,6 +26,20 @@
   }
   // facebook.com / instagram.com / tiktok.com: no watcher yet, see note above.
 
+  // Reloading the extension while a matching tab is already open leaves
+  // that tab's content script running with a severed connection back to
+  // the extension — chrome.runtime goes undefined mid-session. This is
+  // expected and common (it happens on every dev reload), not a bug to
+  // chase — the fix for the tab itself is just a page refresh. What we
+  // control is not throwing an uncaught error every time it happens.
+  function isExtensionContextValid() {
+    try {
+      return Boolean(chrome?.runtime?.id);
+    } catch {
+      return false;
+    }
+  }
+
   function initYouTubeWatcher() {
     let observedNode = null;
     let observer = null;
@@ -37,6 +51,8 @@
     document.addEventListener("yt-navigate-finish", attachToPlayer);
 
     function attachToPlayer() {
+      if (!isExtensionContextValid()) return;
+
       const player = document.querySelector("#movie_player");
       if (!player || player === observedNode) return;
 
@@ -45,6 +61,12 @@
       adCurrentlyShowing = player.classList.contains("ad-showing");
 
       observer = new MutationObserver(() => {
+        if (!isExtensionContextValid()) {
+          // Stale tab, dead connection — stop watching entirely rather
+          // than erroring on every ad from here until the page refreshes.
+          observer.disconnect();
+          return;
+        }
         const isAdShowing = player.classList.contains("ad-showing");
         if (isAdShowing && !adCurrentlyShowing) {
           adCurrentlyShowing = true;
@@ -70,6 +92,8 @@
     }
 
     function runAdCheck(attempt) {
+      if (!isExtensionContextValid()) return;
+
       const adModule = document.querySelector(".ytp-ad-module");
       const record = adModule ? extractYouTubeAdRecord(adModule) : null;
 
@@ -89,8 +113,9 @@
         const { evaluateAd } = await import(heuristicsUrl);
         if (record) flags = evaluateAd(record, { childDirectedPage: false });
       } catch (err) {
-        // Heuristics module failed to load — still show a heads-up rather
-        // than silently doing nothing.
+        // Heuristics module failed to load — could be a stale context, or
+        // a real error. Either way, still show a heads-up rather than
+        // silently doing nothing.
       }
 
       if (flags.length > 0) {
@@ -109,7 +134,16 @@
           body: "Couldn't read any text from this ad card — AdSentinel can't inspect video/image content, so this is just a heads up."
         });
       }
-      chrome.runtime.sendMessage({ type: "ADSENTINEL_BUMP_BADGE" });
+
+      // Badge update is a nice-to-have, not core to the toast the user
+      // already saw — never let a dead connection surface as an error.
+      if (isExtensionContextValid()) {
+        try {
+          chrome.runtime.sendMessage({ type: "ADSENTINEL_BUMP_BADGE" });
+        } catch {
+          // Context died between the check and the call — nothing to do.
+        }
+      }
     }
 
     function extractYouTubeAdRecord(el) {
