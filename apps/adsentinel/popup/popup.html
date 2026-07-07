@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AdSentinel</title>
+  <link rel="stylesheet" href="popup.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="wordmark">
+      SIFT
+      <svg class="mark" viewBox="0 0 100 70" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <rect x="4" y="4" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="20" y="16" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="36" y="28" width="60" height="42" fill="none" stroke="#111111" stroke-width="4"/>
+      </svg>
+    </div>
+    <p class="tagline">AdSentinel — scans the ads on this page, locally.</p>
+  </header>
+
+  <main class="panel">
+    <div class="scan-row">
+      <button id="scanBtn" class="btn-primary">Scan this page</button>
+      <span id="statusText" class="status"></span>
+    </div>
+
+    <div id="summary" class="summary" hidden>
+      <div class="summary-stat">
+        <span id="adCount">0</span><label>ads found</label>
+      </div>
+      <div class="summary-stat">
+        <span id="flagCount">0</span><label>flagged</label>
+      </div>
+    </div>
+
+    <ul id="flagList" class="flag-list"></ul>
+
+    <p id="emptyState" class="empty-state" hidden>No flags on this scan. AdSentinel only checks text, labels, and known ad networks — it can't inspect image content, so this isn't a clean bill of health, just no text-based red flags.</p>
+
+    <div class="actions" id="actionRow" hidden>
+      <button id="exportJsonBtn" class="btn-secondary">Export JSON</button>
+      <button id="exportCsvBtn" class="btn-secondary">Export CSV</button>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <span>Local-only. Nothing leaves your browser unless you export it yourself.</span>
+  </footer>
+
+  <script type="module" src="popup.js"></script>
+</body>
+</html>
