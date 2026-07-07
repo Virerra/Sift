@@ -81,11 +81,11 @@
   <script src="assets/progress.js"></script>
   <script src="assets/certificate.js"></script>
   <script>
-    const { isComplete, loadState, saveState } = window.SIFTProgress;
+    const SP = window.SIFTProgress;
     const lockedEl = document.getElementById("locked");
     const unlockedEl = document.getElementById("unlocked");
 
-    if (!isComplete()) {
+    if (!SP.isComplete()) {
       lockedEl.hidden = false;
     } else {
       unlockedEl.hidden = false;
@@ -94,7 +94,7 @@
       const nameInput = document.getElementById("name-input");
       const today = new Date().toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
 
-      const state = loadState();
+      const state = SP.loadState();
       nameInput.value = state.name || "";
 
       function render() {
@@ -104,9 +104,9 @@
       render();
 
       document.getElementById("update-btn").addEventListener("click", () => {
-        const s = loadState();
+        const s = SP.loadState();
         s.name = nameInput.value;
-        saveState(s);
+        SP.saveState(s);
         render();
       });
 

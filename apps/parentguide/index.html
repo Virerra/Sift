@@ -185,9 +185,8 @@
   <script src="assets/progress.js"></script>
   <script>
     const grid = document.getElementById("module-grid");
-    const { MODULES } = window.SIFTProgress;
 
-    MODULES.forEach((m) => {
+    window.SIFTProgress.MODULES.forEach((m) => {
       const a = document.createElement("a");
       a.href = m.path;
       a.className = "module-card reveal";
