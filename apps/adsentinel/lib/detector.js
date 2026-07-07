@@ -42,6 +42,13 @@
     return AD_HOST_HINTS.some((h) => host.endsWith(h));
   }
 
+  function isVisible(el) {
+    const rect = el.getBoundingClientRect();
+    if (rect.width === 0 || rect.height === 0) return false;
+    const style = window.getComputedStyle(el);
+    return style.visibility !== "hidden" && style.display !== "none";
+  }
+
   function collectCandidates() {
     const found = new Set();
 
@@ -56,7 +63,11 @@
       if (looksLikeAdHost(hostFromSrc(el.src))) found.add(el);
     });
 
-    return [...found];
+    // Pages sometimes carry a hidden template/clone alongside the visible
+    // element it was cloned from — same id, same content, zero size or
+    // display:none. That's not a second ad, it's DOM plumbing, so it's
+    // filtered here rather than shown to the user as a duplicate flag.
+    return [...found].filter(isVisible);
   }
 
   function extractRecord(el) {
@@ -102,14 +113,29 @@
     return hasKidRatingMeta || kidSignals.some((s) => text.includes(s));
   }
 
+  function dedupeBySignature(records) {
+    const seen = new Set();
+    return records.filter((r) => {
+      // locator includes a y-coordinate, which is expected to differ for
+      // genuinely distinct ads even with the same tag/id — strip it here
+      // so the signature only catches true look-alikes.
+      const locatorLabel = r.locator.split(" near ")[0];
+      const signature = `${r.tag}|${r.host}|${locatorLabel}|${r.text}|${r.ariaLabel}`;
+      if (seen.has(signature)) return false;
+      seen.add(signature);
+      return true;
+    });
+  }
+
   function scan() {
     const candidates = collectCandidates();
+    const ads = dedupeBySignature(candidates.map(extractRecord));
     return {
       url: window.location.href,
       scannedAt: new Date().toISOString(),
       childDirectedPage: pageLooksChildDirected(),
-      adCount: candidates.length,
-      ads: candidates.map(extractRecord)
+      adCount: ads.length,
+      ads
     };
   }
 
