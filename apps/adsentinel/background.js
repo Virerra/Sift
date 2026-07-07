@@ -19,6 +19,18 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       color: "#111111"
     });
   }
+
+  if (message?.type === "ADSENTINEL_BUMP_BADGE") {
+    const tabId = sender.tab?.id;
+    if (!tabId) return false;
+
+    chrome.action.getBadgeText({ tabId }).then((current) => {
+      const next = (parseInt(current, 10) || 0) + 1;
+      chrome.action.setBadgeText({ tabId, text: String(next) });
+      chrome.action.setBadgeBackgroundColor({ tabId, color: "#0b1f3a" });
+    });
+  }
+
   return false;
 });
 

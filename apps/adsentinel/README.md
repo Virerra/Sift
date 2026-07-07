@@ -16,19 +16,23 @@ backend, no data leaves your machine unless you click Export.
 
 ```
 adsentinel/
-├── manifest.json       MV3, activeTab + scripting only — no host_permissions,
-│                        so the extension has zero access to any page until
-│                        you click the icon and hit Scan. Nothing runs in
-│                        the background.
-├── background.js       Badge-count only. No network calls.
+├── manifest.json       MV3. activeTab + scripting for the manual scan flow
+│                        (works on any page). host_permissions + a
+│                        content_scripts entry scoped to exactly four
+│                        domains — youtube.com, facebook.com, instagram.com,
+│                        tiktok.com — for the auto-watch flow. Chrome's
+│                        install prompt names those four domains
+│                        specifically; nothing broader is requested.
+├── background.js       Badge count only. No network calls.
 ├── lib/
-│   ├── detector.js      Injected into the page on scan. Finds ad-shaped
-│   │                    elements (known ad-network iframes, common ad
-│   │                    class/id/data-attribute patterns) and extracts
-│   │                    whatever text is accessible: alt text, aria-label,
-│   │                    title, and innerText where same-origin.
-│   └── heuristics.js    Pure functions, no DOM access. Takes the extracted
-│                        records and returns flags + human-readable reasons.
+│   ├── detector.js         Manual scan: injected on click, any page.
+│   ├── heuristics.js        Pure functions, no DOM access.
+│   └── platform-watcher.js  Auto-injected only on the four curated
+│                             domains. Currently watches YouTube's video
+│                             player for ad state and shows an in-page
+│                             toast. Facebook/Instagram/TikTok are
+│                             pre-authorized but have no watcher logic yet
+│                             — see the file's header comment for why.
 └── popup/
     ├── popup.html/css   The UI you interact with.
     └── popup.js         Orchestrates: inject detector → run heuristics →
@@ -40,6 +44,23 @@ only extracts; `heuristics.js` only judges. That split is what lets
 Phase 3 (AuditTool) reuse the ruleset against a bulk ad inventory without
 dragging DOM-scraping code along, and lets the ruleset evolve independently
 as false-positive/negative reports come in.
+
+## Two ways ads get surfaced
+
+**Manual scan** — works on any page. You click the icon, hit Scan, get a
+full flagged list. This is the original Phase 1 flow and still has zero
+standing access to anything.
+
+**Auto-watch** — only on YouTube, Facebook, Instagram, and TikTok, and only
+because those four domains are explicitly listed in the manifest (see
+above). Right now this only does one thing: when a YouTube video ad starts
+playing, a small in-page toast tells you, using a `MutationObserver`
+watching the single `#movie_player` element for its `ad-showing` class —
+not the whole page, which would fire constantly for unrelated DOM churn.
+The toast is rendered in a Shadow DOM so the host page's CSS can't bleed
+into it (and vice versa). It can't inspect what the ad actually shows, same
+limitation as everywhere else in this codebase — it's a heads-up, not a
+flag.
 
 ## What the heuristics actually check
 
@@ -99,7 +120,10 @@ real Phase 1.5 milestone rather than folding it into the heuristics file.
 
 ## Next in Phase 1
 
-- Wire up a GitHub issue template so Export → Report has somewhere real to go
 - Add a small test page (`test/fixtures/`) with known dark-pattern and
   category ads so the ruleset has a regression harness before Phase 2 starts
   consuming its output
+- Facebook, Instagram, and TikTok watchers — `platform-watcher.js` is
+  structured to add these as additional `if (host.endsWith(...))` branches;
+  each needs its own DOM investigation first, YouTube's approach won't
+  transfer directly

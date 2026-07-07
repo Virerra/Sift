@@ -3,7 +3,7 @@
   "name": "AdSentinel — SIFT",
   "short_name": "AdSentinel",
   "version": "0.1.0",
-  "description": "Scans ads on the current page for manipulative and age-inappropriate patterns. Local-only, no accounts, nothing leaves your browser.",
+  "description": "Scans ads for manipulative and age-inappropriate patterns. Auto-watches for video ads on YouTube, Facebook, Instagram, and TikTok; manual scan works on any page. Nothing leaves your browser.",
   "icons": {
     "16": "icons/icon16.png",
     "48": "icons/icon48.png",
@@ -18,7 +18,24 @@
     }
   },
   "permissions": ["activeTab", "scripting"],
-  "host_permissions": [],
+  "host_permissions": [
+    "*://*.youtube.com/*",
+    "*://*.facebook.com/*",
+    "*://*.instagram.com/*",
+    "*://*.tiktok.com/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.facebook.com/*",
+        "*://*.instagram.com/*",
+        "*://*.tiktok.com/*"
+      ],
+      "js": ["lib/platform-watcher.js"],
+      "run_at": "document_idle"
+    }
+  ],
   "background": {
     "service_worker": "background.js"
   },
