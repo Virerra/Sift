@@ -23,16 +23,28 @@ adsentinel/
 │                        tiktok.com — for the auto-watch flow. Chrome's
 │                        install prompt names those four domains
 │                        specifically; nothing broader is requested.
+│                        web_accessible_resources exposes lib/heuristics.js
+│                        so platform-watcher.js can dynamically import it.
 ├── background.js       Badge count only. No network calls.
+├── scripts/
+│   └── sync-heuristics.js  Copies packages/heuristics/heuristics.js into
+│                            lib/ (see below for why this copy has to exist).
+│                            Run via `npm run sync`.
 ├── lib/
 │   ├── detector.js         Manual scan: injected on click, any page.
-│   ├── heuristics.js        Pure functions, no DOM access.
+│   ├── heuristics.js        GENERATED — do not edit. Source of truth is
+│   │                         ../../../packages/heuristics/heuristics.js.
+│   │                         Chrome can only load files inside the
+│   │                         extension's own folder, so a synced copy has
+│   │                         to live here regardless of where the ruleset
+│   │                         is actually maintained.
 │   └── platform-watcher.js  Auto-injected only on the four curated
-│                             domains. Currently watches YouTube's video
-│                             player for ad state and shows an in-page
-│                             toast. Facebook/Instagram/TikTok are
-│                             pre-authorized but have no watcher logic yet
-│                             — see the file's header comment for why.
+│                             domains. Watches YouTube's `.ytp-ad-module`
+│                             for ad state, dynamically imports the real
+│                             heuristics module, and shows an in-page toast
+│                             with the actual evaluation — not just "an ad
+│                             is playing." Facebook/Instagram/TikTok are
+│                             pre-authorized but have no watcher logic yet.
 └── popup/
     ├── popup.html/css   The UI you interact with.
     └── popup.js         Orchestrates: inject detector → run heuristics →
@@ -41,9 +53,11 @@ adsentinel/
 
 Detection and judgment are deliberately split into two files. `detector.js`
 only extracts; `heuristics.js` only judges. That split is what lets
-Phase 3 (AuditTool) reuse the ruleset against a bulk ad inventory without
-dragging DOM-scraping code along, and lets the ruleset evolve independently
-as false-positive/negative reports come in.
+AuditTool reuse the ruleset against a bulk ad inventory without dragging
+DOM-scraping code along, and lets the ruleset evolve independently as
+false-positive/negative reports come in — which is also exactly why it now
+lives in `packages/heuristics/` as its own package rather than buried in
+this app. See that package's README for the copy/sync mechanics.
 
 ## Two ways ads get surfaced
 
@@ -120,11 +134,25 @@ real Phase 1.5 milestone rather than folding it into the heuristics file.
 
 ## Testing
 
-Two layers, catching two different kinds of breakage:
+Three layers now, each catching a different kind of breakage:
+
+```
+cd packages/heuristics
+npm test                          # the ruleset itself, in isolation
+```
 
 ```
 cd apps/adsentinel
-npm test                          # automated, no browser — pure heuristics logic
+npm test                          # confirms lib/heuristics.js matches
+                                   # packages/heuristics — fails if you
+                                   # edited the ruleset and forgot to sync
+```
+
+If you changed anything in `packages/heuristics/heuristics.js`, run this
+before committing:
+```
+cd apps/adsentinel
+npm run sync
 ```
 
 Then for the DOM/detection side, which genuinely needs a browser:
@@ -138,11 +166,11 @@ Visit `http://localhost:8000/test-page.html`, scan it with AdSentinel, and
 compare the popup's output against the expected-flags table printed on the
 page itself.
 
-`npm test` catches "someone changed a rule and broke an existing case."
-The fixture page catches "a DOM selector stopped matching." Neither
-substitutes for the other — the unit tests know nothing about the DOM, and
-the fixture page doesn't pin down exact reason strings the way an assertion
-does.
+The ruleset tests catch "someone changed a rule and broke an existing
+case." The sync test catches "someone changed the rule but forgot to
+propagate it to the file Chrome actually loads." The fixture page catches
+"a DOM selector stopped matching." All three are needed; none substitutes
+for the others.
 
 ## Next in Phase 1
 

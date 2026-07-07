@@ -1,0 +1,11 @@
+{
+  "name": "@sift/heuristics",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "SIFT's ad detection ruleset — shared by AdSentinel, AuditTool, and AdDashboard",
+  "main": "heuristics.js",
+  "scripts": {
+    "test": "node --test"
+  }
+}

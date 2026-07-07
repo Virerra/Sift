@@ -25,20 +25,18 @@ Phases ship in order. AdSentinel ships completely before AdDashboard starts.
 sift/
 ├── apps/
 │   └── adsentinel/     Phase 1 — browser extension (see its own README)
-├── packages/           Shared code, populated starting Phase 1.5:
-│                          heuristics — the detection ruleset
-│                          brand      — design tokens, wordmark, icon assets
-│                          schema     — the versioned report format every
-│                                       app reads and writes
+├── packages/
+│   └── heuristics/     The detection ruleset — source of truth. AdSentinel
+│                        keeps a generated, synced copy in its own lib/
+│                        folder because Chrome can't load files from outside
+│                        an extension's own directory; Node consumers
+│                        (AuditTool, AdDashboard) import this directly.
+│                        See packages/heuristics/README.md.
 ├── .github/
 │   └── ISSUE_TEMPLATE/  Ad-report template — where Export → Report lands
 ├── LICENSE              MIT, applies to the whole repo
 └── README.md            this file
 ```
-
-`packages/` is empty until Phase 1.5 pulls `apps/adsentinel/lib/heuristics.js`
-out into a shared package that AuditTool and AdDashboard both import — see
-that phase's PR when it lands rather than expecting anything here yet.
 
 ## Principles
 
@@ -53,3 +51,7 @@ Issues and PRs welcome once Phase 1 is stable. If you've spotted an ad
 AdSentinel should have flagged and didn't (or flagged and shouldn't have),
 use the [ad report template](.github/ISSUE_TEMPLATE/ad-report.md) — that's
 exactly the kind of signal the heuristics ruleset needs to improve.
+
+Editing the ruleset itself? It lives in `packages/heuristics/`, not in
+`apps/adsentinel/lib/` — that copy is generated. See
+`packages/heuristics/README.md` before you start.

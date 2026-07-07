@@ -5,6 +5,7 @@
   "type": "module",
   "description": "SIFT Phase 1 — browser extension that scans ads for manipulative and age-inappropriate patterns",
   "scripts": {
+    "sync": "node scripts/sync-heuristics.js",
     "test": "node --test"
   }
 }
