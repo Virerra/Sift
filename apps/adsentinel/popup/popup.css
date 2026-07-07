@@ -151,3 +151,20 @@ body {
   color: var(--muted);
   border-top: 1px solid var(--line);
 }
+
+.share-row {
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.btn-share {
+  width: 100%;
+}
+
+.share-note {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin: 6px 0 0;
+  line-height: 1.4;
+}

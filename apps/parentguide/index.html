@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SIFT — Parent Guide</title>
+  <meta name="description" content="What to look for in ads shown to kids, how AdSentinel's flags work, and how to report a bad ad — to the platform and to SIFT." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <div class="wordmark-row">
+      <span class="wordmark">SIFT</span>
+      <svg class="mark" viewBox="0 0 100 70" aria-hidden="true">
+        <rect x="4" y="4" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="20" y="16" width="60" height="42" fill="none" stroke="#0b1f3a" stroke-width="4"/>
+        <rect x="36" y="28" width="60" height="42" fill="none" stroke="#111111" stroke-width="4"/>
+      </svg>
+    </div>
+    <p class="tagline">Safe internet for them!</p>
+  </header>
+
+  <nav class="toc" aria-label="On this page">
+    <a href="#what-sift-does">What SIFT does</a>
+    <a href="#what-to-look-for">What to look for</a>
+    <a href="#how-flags-work">How AdSentinel's flags work</a>
+    <a href="#how-to-report">How to report a bad ad</a>
+  </nav>
+
+  <main>
+    <section id="what-sift-does">
+      <h2>What SIFT does</h2>
+      <p>
+        SIFT is a small set of open-source tools that help you see what
+        ads are actually being shown to kids on YouTube, Facebook,
+        Instagram, and TikTok — and give you a way to do something about
+        it. <strong>AdSentinel</strong> is a browser extension that scans
+        the ads on a page you're looking at and flags the ones that match
+        known manipulative or age-inappropriate patterns, with a plain
+        reason for every flag. It runs entirely in your own browser —
+        nothing is sent anywhere unless you choose to share it.
+      </p>
+      <p>
+        This page is the plain-language companion to that tool: what
+        AdSentinel can and can't catch, what to watch for yourself, and
+        where to actually send a report when something's wrong.
+      </p>
+    </section>
+
+    <section id="what-to-look-for">
+      <h2>What to look for</h2>
+      <p>
+        You don't need special tools to catch most of this — it's mostly
+        about trusting a feeling of "that's off" and knowing where to send
+        it. A few concrete patterns worth knowing:
+      </p>
+
+      <div class="pattern-card">
+        <h3>Fake urgency and fake prizes</h3>
+        <p>
+          "Only 2 left," "you've been selected," "claim your free prize" —
+          language designed to short-circuit a considered decision, aimed
+          at anyone, but especially effective on kids who haven't built up
+          the same skepticism yet.
+        </p>
+      </div>
+
+      <div class="pattern-card">
+        <h3>Age-restricted products on kid content</h3>
+        <p>
+          Gambling, dating apps, alcohol or vaping products, "get rich
+          quick" crypto schemes — these are restricted in most places for
+          good reason, and seeing them served against cartoons or kids'
+          gaming content is a real signal something in the platform's ad
+          targeting broke down, not a one-off fluke.
+        </p>
+      </div>
+
+      <div class="pattern-card">
+        <h3>Anything that just feels wrong</h3>
+        <p>
+          Sometimes it's the framing, the imagery, the pacing — something
+          that doesn't sit right even if you can't immediately name why.
+          That instinct is worth acting on. You don't need to be able to
+          categorize <em>why</em> an ad feels predatory or inappropriate
+          before reporting it — describing what you saw and where is
+          enough. Trust it and report it; let the platform's own reviewers
+          make the final call.
+        </p>
+      </div>
+    </section>
+
+    <section id="how-flags-work">
+      <h2>How AdSentinel's flags work — and where they stop</h2>
+      <p>
+        Worth understanding clearly, because it changes what a "clean"
+        scan actually means: AdSentinel reads <em>text</em> — an ad's
+        copy, its accessible labels, which network served it. It does not
+        and currently cannot look at an ad's actual image or video
+        content. A scan with zero flags means nothing text-based tripped a
+        rule; it is not a guarantee the ad is fine. If an ad's images or
+        video feel off even though the text passed clean, that's exactly
+        the gap between what a machine can check and what a person
+        watching can see — report it anyway.
+      </p>
+      <table class="flag-table">
+        <tr><th>Flag</th><th>What it means</th></tr>
+        <tr><td>Dark pattern</td><td>Ad copy matches known manipulative marketing phrasing.</td></tr>
+        <tr><td>Age-restricted category</td><td>Ad copy matches a category that's age-restricted in most places.</td></tr>
+        <tr><td>Unverified network</td><td>Served from an ad-tech domain not on the known-network list. Not proof of anything by itself — just unfamiliar.</td></tr>
+        <tr><td>No accessible text</td><td>The ad has no alt text or label at all, so nothing above could even run.</td></tr>
+        <tr><td>Needs your review</td><td>An image-only ad on a page that looks built for kids. AdSentinel stops and asks a person to look, rather than guessing.</td></tr>
+      </table>
+    </section>
+
+    <section id="how-to-report">
+      <h2>How to report a bad ad</h2>
+      <p>Two places a report actually helps — both are worth doing, they serve different purposes:</p>
+
+      <div class="pattern-card">
+        <h3>Report it to the platform directly</h3>
+        <p>
+          This is the report that can get a specific ad taken down.
+          Every major platform has a built-in reporting flow, usually
+          behind a small menu (often three dots, "···" or similar) on
+          the ad itself.
+        </p>
+        <ul>
+          <li>YouTube: the "···" menu on the ad, or <a href="https://support.google.com/google-ads/answer/7660847">Google's ad complaint form</a></li>
+          <li>Facebook / Instagram: the "···" menu on the ad → Report ad</li>
+          <li>TikTok: tap and hold the ad, or use the flag icon on it</li>
+        </ul>
+      </div>
+
+      <div class="pattern-card">
+        <h3>Report it to SIFT</h3>
+        <p>
+          This doesn't take the ad down, but it's what turns one person's
+          "this seemed off" into a pattern others can see and act on. If
+          you have AdSentinel installed, use its <strong>Export</strong>
+          button, then open an issue using the
+          <a href="https://github.com/Virerra/Sift/blob/main/.github/ISSUE_TEMPLATE/ad-report.md">ad report template</a>
+          and attach it. No account needed on your end beyond a GitHub
+          login to open the issue itself.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>
+      Part of the <a href="https://github.com/Virerra/Sift">SIFT project</a> — open source, MIT licensed, no accounts required where avoidable.
+    </p>
+  </footer>
+</body>
+</html>

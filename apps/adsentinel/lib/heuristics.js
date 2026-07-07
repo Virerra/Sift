@@ -116,6 +116,7 @@ export function evaluateAd(ad, { childDirectedPage } = {}) {
     if (patterns.some((p) => p.test(haystack))) {
       flags.push({
         type: FLAG_TYPES.AGE_MISMATCH,
+        category, // structured, for anything downstream that aggregates by category (e.g. AdDashboard) rather than parsing prose
         reason: childDirectedPage
           ? `Ad appears to be in an age-restricted category (${category}) on a page that looks child-directed.`
           : `Ad appears to be in an age-restricted category (${category}). Flagged for visibility even though this page didn't trip child-directed signals — those signals are conservative and can miss real kid audiences.`

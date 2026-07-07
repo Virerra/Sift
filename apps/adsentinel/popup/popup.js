@@ -1,5 +1,11 @@
 import { evaluateAd, FLAG_TYPES } from "../lib/heuristics.js";
 
+// Set this once you've deployed apps/addashboard to Vercel — e.g.
+// "https://your-project.vercel.app/api/reports". Left blank, the Share
+// button explains that clearly instead of failing silently against a
+// nonexistent endpoint.
+const ADDASHBOARD_URL = "";
+
 const scanBtn = document.getElementById("scanBtn");
 const statusText = document.getElementById("statusText");
 const summaryEl = document.getElementById("summary");
@@ -10,6 +16,9 @@ const emptyStateEl = document.getElementById("emptyState");
 const actionRowEl = document.getElementById("actionRow");
 const exportJsonBtn = document.getElementById("exportJsonBtn");
 const exportCsvBtn = document.getElementById("exportCsvBtn");
+const shareRowEl = document.getElementById("shareRow");
+const shareBtn = document.getElementById("shareBtn");
+const shareStatusEl = document.getElementById("shareStatus");
 
 // Holds the most recent scan+evaluation so export buttons can reuse it
 // without re-scanning.
@@ -83,10 +92,12 @@ function render(report) {
   adCountEl.textContent = report.adCount;
   flagCountEl.textContent = report.flagged.length;
   summaryEl.hidden = false;
+  shareStatusEl.textContent = "";
 
   if (report.flagged.length === 0) {
     emptyStateEl.hidden = false;
     actionRowEl.hidden = true;
+    shareRowEl.hidden = true;
     return;
   }
 
@@ -103,6 +114,7 @@ function render(report) {
     }
   }
   actionRowEl.hidden = false;
+  shareRowEl.hidden = false;
 }
 
 function setBusy(isBusy, message) {
@@ -160,3 +172,64 @@ function csvEscape(value) {
   const str = String(value ?? "");
   return /[",\n]/.test(str) ? `"${str.replace(/"/g, '""')}"` : str;
 }
+
+// Mirrors packages/schema/report.js's platformFromHostname — duplicated
+// rather than imported, same reasoning as detector.js/heuristics.js not
+// cross-importing: this is a five-line function, not worth setting up a
+// second sync pipeline for. If it ever needs to grow past "check four
+// known suffixes," that's the signal to reconsider.
+const KNOWN_PLATFORMS = ["youtube.com", "facebook.com", "instagram.com", "tiktok.com"];
+function platformFromHostname(hostname) {
+  const host = (hostname || "").toLowerCase();
+  return KNOWN_PLATFORMS.find((p) => host.endsWith(p)) || "other";
+}
+
+// Builds exactly the safe, aggregate-only shape defined by
+// packages/schema/report.js — flag types and categories only. Never ad
+// text, never the page URL, never anything from the DOM locator. See that
+// schema's file header for the full reasoning.
+function buildDashboardSubmission(report) {
+  return {
+    schemaVersion: 1,
+    platform: platformFromHostname(new URL(report.url).hostname),
+    childDirectedPage: report.childDirectedPage,
+    submittedAt: new Date().toISOString(),
+    flaggedAds: report.flagged.map((entry) => ({
+      flags: entry.flags.map((f) =>
+        f.category ? { type: f.type, category: f.category } : { type: f.type }
+      )
+    }))
+  };
+}
+
+shareBtn.addEventListener("click", async () => {
+  if (!lastReport) return;
+
+  if (!ADDASHBOARD_URL) {
+    shareStatusEl.textContent = "AdDashboard isn't deployed yet — see popup.js for how to set this up.";
+    return;
+  }
+
+  shareBtn.disabled = true;
+  shareStatusEl.textContent = "Sending…";
+
+  try {
+    const submission = buildDashboardSubmission(lastReport);
+    const res = await fetch(ADDASHBOARD_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(submission)
+    });
+
+    if (res.ok) {
+      shareStatusEl.textContent = "Shared. Thank you.";
+    } else {
+      shareStatusEl.textContent = `AdDashboard rejected this (${res.status}) — the schema may have changed.`;
+    }
+  } catch (err) {
+    console.error(err);
+    shareStatusEl.textContent = "Couldn't reach AdDashboard — check your connection.";
+  } finally {
+    shareBtn.disabled = false;
+  }
+});

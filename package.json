@@ -1,0 +1,9 @@
+{
+  "name": "sift",
+  "private": true,
+  "description": "SIFT — Safe Internet For Them. Monorepo root; see README.md.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}

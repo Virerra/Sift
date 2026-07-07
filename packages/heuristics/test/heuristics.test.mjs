@@ -51,6 +51,8 @@ test("gambling copy triggers age-mismatch category flag", () => {
   };
   const flags = evaluateAd(ad, { childDirectedPage: false });
   assert.ok(flagTypes(flags).includes(FLAG_TYPES.AGE_MISMATCH));
+  const ageMismatch = flags.find((f) => f.type === FLAG_TYPES.AGE_MISMATCH);
+  assert.equal(ageMismatch.category, "gambling");
 });
 
 test("age-mismatch reason text changes when the page looks child-directed", () => {

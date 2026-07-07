@@ -1,0 +1,38 @@
+name: Deploy ParentGuide to GitHub Pages
+
+# GitHub Pages' simple branch-based deployment only supports serving from
+# the repo root or /docs — neither works for a monorepo subfolder like
+# apps/parentguide. This workflow is what makes an arbitrary subfolder
+# deployable: it just uploads that one folder as the Pages artifact.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/parentguide/**"
+      - ".github/workflows/deploy-parentguide.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: apps/parentguide
+      - id: deployment
+        uses: actions/deploy-pages@v4

@@ -76,6 +76,20 @@ into it (and vice versa). It can't inspect what the ad actually shows, same
 limitation as everywhere else in this codebase — it's a heads-up, not a
 flag.
 
+## Sharing to AdDashboard
+
+Once you've scanned a page and gotten flags, a **Share to AdDashboard**
+button appears alongside Export. Opt-in, one click at a time — nothing
+gets sent automatically. It sends only flag types, categories, and which
+platform (not the page URL, never ad text) to the aggregate public
+dashboard. See `packages/schema/report.js` for exactly what that shape is
+and why it's that narrow.
+
+**To enable it:** deploy `apps/addashboard` (see that app's README), then
+open `popup/popup.js` and set `ADDASHBOARD_URL` to your deployed URL plus
+`/api/reports`. Until that's set, the button explains clearly that
+AdDashboard isn't configured yet rather than failing silently.
+
 ## What the heuristics actually check
 
 Five categories, all text/structure-based:

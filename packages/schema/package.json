@@ -1,0 +1,14 @@
+{
+  "name": "@sift/schema",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "SIFT's versioned report contract between producers (AdSentinel, AuditTool) and consumers (AdDashboard)",
+  "main": "report.js",
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  }
+}
