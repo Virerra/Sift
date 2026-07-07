@@ -6,13 +6,17 @@
 // four sites specifically, and this file has zero reach anywhere else.
 //
 // Scope of this first pass, stated plainly: only YouTube's video-ad state
-// is actually watched right now. Facebook/Instagram/TikTok are already
-// pre-authorized in the manifest so a later update can add their watchers
-// without asking users to re-grant permissions — but no detection logic
-// ships for them yet. Their video players have entirely different DOM
-// structures and each needs its own reverse-engineered watcher; bundling
-// three half-working guesses into this release would be worse than
-// shipping YouTube alone and being honest about the rest.
+// is actually watched right now, and only the .ytp-ad-module companion/
+// overlay format — confirmed by live DOM inspection, not assumed. YouTube
+// has multiple distinct ad rendering formats (a separate #sponsor-button
+// style unit exists too) and this doesn't cover all of them yet.
+// Facebook/Instagram/TikTok are already pre-authorized in the manifest so
+// a later update can add their watchers without asking users to re-grant
+// permissions — but no detection logic ships for them yet. Their video
+// players have entirely different DOM structures and each needs its own
+// reverse-engineered watcher; bundling three half-working guesses into
+// this release would be worse than shipping YouTube alone and being
+// honest about the rest.
 
 (function () {
   const host = window.location.hostname;
@@ -58,11 +62,69 @@
     }
 
     function notifyAdStarted() {
-      showToast({
-        title: "Video ad playing",
-        body: "AdSentinel can't inspect video ad content — this is just a heads up, not a flag."
-      });
+      // .ytp-ad-module is YouTube's own top-level wrapper for the video-ad
+      // overlay/companion card — confirmed by live inspection, not a guess.
+      // It's populated a beat after the ad-showing class appears, so give
+      // it a moment before reading its content.
+      setTimeout(() => runAdCheck(0), 400);
+    }
+
+    function runAdCheck(attempt) {
+      const adModule = document.querySelector(".ytp-ad-module");
+      const record = adModule ? extractYouTubeAdRecord(adModule) : null;
+
+      if ((!record || !record.hasAccessibleText) && attempt < 1) {
+        // Still empty — YouTube hadn't finished populating it. One retry.
+        setTimeout(() => runAdCheck(attempt + 1), 500);
+        return;
+      }
+
+      evaluateAndToast(record);
+    }
+
+    async function evaluateAndToast(record) {
+      let flags = [];
+      try {
+        const heuristicsUrl = chrome.runtime.getURL("lib/heuristics.js");
+        const { evaluateAd } = await import(heuristicsUrl);
+        if (record) flags = evaluateAd(record, { childDirectedPage: false });
+      } catch (err) {
+        // Heuristics module failed to load — still show a heads-up rather
+        // than silently doing nothing.
+      }
+
+      if (flags.length > 0) {
+        showToast({
+          title: `Video ad flagged — ${flags.length} issue${flags.length > 1 ? "s" : ""}`,
+          body: flags[0].reason
+        });
+      } else if (record && record.hasAccessibleText) {
+        showToast({
+          title: "Video ad playing",
+          body: "No text-based flags on this one. AdSentinel can't inspect video/image content, so this isn't a clean bill of health."
+        });
+      } else {
+        showToast({
+          title: "Video ad playing",
+          body: "Couldn't read any text from this ad card — AdSentinel can't inspect video/image content, so this is just a heads up."
+        });
+      }
       chrome.runtime.sendMessage({ type: "ADSENTINEL_BUMP_BADGE" });
+    }
+
+    function extractYouTubeAdRecord(el) {
+      const text = (el.innerText || "").slice(0, 500);
+      const altText = [...el.querySelectorAll("img[alt]")].map((img) => img.alt).join(" ");
+      const ariaLabel = el.getAttribute("aria-label") || el.getAttribute("title") || "";
+      return {
+        text,
+        altText,
+        ariaLabel,
+        // Native YouTube ad module, not a third-party iframe — host stays
+        // null on purpose, same reasoning as detector.js.
+        host: null,
+        hasAccessibleText: Boolean(text.trim() || altText.trim() || ariaLabel.trim())
+      };
     }
   }
 

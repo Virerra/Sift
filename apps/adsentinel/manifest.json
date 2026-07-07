@@ -39,5 +39,16 @@
   "background": {
     "service_worker": "background.js"
   },
+  "web_accessible_resources": [
+    {
+      "resources": ["lib/heuristics.js"],
+      "matches": [
+        "*://*.youtube.com/*",
+        "*://*.facebook.com/*",
+        "*://*.instagram.com/*",
+        "*://*.tiktok.com/*"
+      ]
+    }
+  ],
   "minimum_chrome_version": "110"
 }

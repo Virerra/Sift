@@ -27,7 +27,11 @@
     'ins.adsbygoogle',
     '[id*="sponsor" i]', '[class*="sponsor" i]',
     '[data-ad]', '[data-testid*="ad" i]',
-    '[aria-label*="advertisement" i]'
+    '[aria-label*="advertisement" i]',
+    // YouTube's video-ad companion/overlay wrapper — confirmed via live
+    // DOM inspection, not a guess. Narrow and specific enough not to risk
+    // false positives from ordinary words containing "ad".
+    ".ytp-ad-module"
   ];
 
   function hostFromSrc(src) {
