@@ -1,0 +1,42 @@
+[
+  {
+    "id": "1",
+    "platform": "youtube.com",
+    "text": "Sponsored: new running shoes just launched — shop the collection.",
+    "ariaLabel": "Sponsored",
+    "host": null
+  },
+  {
+    "id": "2",
+    "platform": "youtube.com",
+    "text": "Only 2 left! Act now before this deal disappears.",
+    "ariaLabel": "Sponsored",
+    "host": null
+  },
+  {
+    "id": "3",
+    "platform": "youtube.com",
+    "text": "Best online casino jackpot slots — play free today.",
+    "ariaLabel": "Sponsored",
+    "host": null,
+    "childDirected": true
+  },
+  {
+    "id": "4",
+    "platform": "tiktok.com",
+    "text": "",
+    "ariaLabel": "Advertisement",
+    "host": "securepubads.g.doubleclick.net"
+  },
+  {
+    "id": "5",
+    "platform": "tiktok.com",
+    "text": "",
+    "host": "fake-ads-network.example"
+  },
+  {
+    "id": "6",
+    "platform": "facebook.com",
+    "text": ""
+  }
+]

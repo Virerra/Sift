@@ -1,0 +1,16 @@
+{
+  "name": "@sift/audit-tool",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "SIFT Phase 3 — run the shared detection ruleset against a bulk ad inventory. For platforms or auditors doing self-serve compliance checking.",
+  "bin": {
+    "audit-tool": "bin/audit.js"
+  },
+  "scripts": {
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@sift/heuristics": "*"
+  }
+}

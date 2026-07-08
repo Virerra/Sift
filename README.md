@@ -14,10 +14,12 @@ is being served.
 |---|---|---|
 | [AdSentinel](apps/adsentinel) | Browser extension, scans ads on the current page | In progress |
 | [AdDashboard](apps/addashboard) | Next.js app on Vercel, aggregates opt-in reports into public stats | Built, not yet deployed |
-| AuditTool | CLI/library version of the detection engine for bulk scanning | Planned |
+| [AuditTool](apps/audit-tool) | CLI/library version of the detection engine for bulk scanning | Built |
 | [ParentGuide](apps/parentguide) | Static site on GitHub Pages — 7-module self-paced guide with progress tracking and a certificate | Built, not yet deployed |
 
-Phases ship in order. AdSentinel shipped before AdDashboard started.
+All four original phases are now built. AdDashboard and ParentGuide still
+need their one-time deploy steps (Vercel + Postgres, and GitHub Pages
+source set to Actions, respectively) — see each app's own README.
 
 ## Structure
 
@@ -26,6 +28,8 @@ sift/
 ├── apps/
 │   ├── adsentinel/      Phase 1 — browser extension (see its own README)
 │   ├── addashboard/     Phase 2 — Next.js app, deploys to Vercel
+│   ├── audit-tool/      Phase 3 — CLI/library, no deployment target;
+│   │                     `npm run` or `npx` it directly, or wire into CI
 │   └── parentguide/     Phase 4 — static site, deploys to GitHub Pages
 ├── packages/
 │   ├── heuristics/      The detection ruleset — source of truth. AdSentinel
