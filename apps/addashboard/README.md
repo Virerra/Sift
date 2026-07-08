@@ -98,6 +98,9 @@ gives Next no signal that the data changes over time.
   confirm a submission is genuine — it can only check the submission is
   *structurally* well-formed. See `packages/schema/report.js` for the full
   reasoning.
-- **AdSentinel doesn't submit here yet.** The API is ready and tested; the
-  extension's popup needs a "Share to AdDashboard" button wired to
-  `POST /api/reports`, opt-in, separate from the existing local Export.
+- **AdSentinel now submits here** — `ADDASHBOARD_URL` in its `popup.js`
+  points at this project's live URL. Worth knowing operationally: that
+  makes this specific Vercel project + Postgres database the de facto
+  shared instance for anyone running AdSentinel unmodified, not just a
+  personal test deployment — keep an eye on Vercel/Postgres usage as
+  real traffic shows up, not just at setup time.

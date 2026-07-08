@@ -4,7 +4,7 @@ import { evaluateAd, FLAG_TYPES } from "../lib/heuristics.js";
 // "https://your-project.vercel.app/api/reports". Left blank, the Share
 // button explains that clearly instead of failing silently against a
 // nonexistent endpoint.
-const ADDASHBOARD_URL = "";
+const ADDASHBOARD_URL = "https://sift-addashboard.vercel.app/api/reports";
 
 const scanBtn = document.getElementById("scanBtn");
 const statusText = document.getElementById("statusText");

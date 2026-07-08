@@ -85,10 +85,13 @@ platform (not the page URL, never ad text) to the aggregate public
 dashboard. See `packages/schema/report.js` for exactly what that shape is
 and why it's that narrow.
 
-**To enable it:** deploy `apps/addashboard` (see that app's README), then
-open `popup/popup.js` and set `ADDASHBOARD_URL` to your deployed URL plus
-`/api/reports`. Until that's set, the button explains clearly that
-AdDashboard isn't configured yet rather than failing silently.
+**Already wired up:** `ADDASHBOARD_URL` in `popup/popup.js` points at
+`https://sift-addashboard.vercel.app/api/reports` — the project's live
+instance. That means anyone running this extension as-is shares (opt-in,
+per click) into the same community dataset, which is the actual point of
+a *public* transparency dashboard — one shared instance, not everyone
+standing up their own. If you fork this for your own separate deployment,
+change that URL to your own AdDashboard's `/api/reports` first.
 
 ## What the heuristics actually check
 

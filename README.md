@@ -13,7 +13,7 @@ is being served.
 | Component | What it is | Status |
 |---|---|---|
 | [AdSentinel](apps/adsentinel) | Browser extension, scans ads on the current page | In progress |
-| [AdDashboard](apps/addashboard) | Next.js app on Vercel, aggregates opt-in reports into public stats | Built, not yet deployed |
+| [AdDashboard](apps/addashboard) | Next.js app on Vercel, aggregates opt-in reports into public stats | [Live](https://sift-addashboard.vercel.app) |
 | [AuditTool](apps/audit-tool) | CLI/library version of the detection engine for bulk scanning | Built |
 | [ParentGuide](apps/parentguide) | Static site on GitHub Pages — 7-module self-paced guide with progress tracking and a certificate | Built, not yet deployed |
 
