@@ -1,11 +1,9 @@
 {
-  "name": "adsentinel",
+  "name": "sift",
   "private": true,
-  "version": "0.1.0",
-  "type": "module",
-  "description": "SIFT Phase 1 — browser extension that scans ads for manipulative and age-inappropriate patterns",
-  "scripts": {
-    "sync": "node scripts/sync-heuristics.js",
-    "test": "node --test"
-  }
+  "description": "SIFT — Safe Internet For Them. Monorepo root; see README.md.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }
