@@ -90,6 +90,48 @@ threshold if you're retrofitting this onto an existing inventory with
 known issues, and ratchet it down over time rather than trying to hit
 zero on day one.
 
+### A concrete example, if you're a platform wiring this into your own CI
+
+This assumes your CI job checks out this repo (or a fork) alongside your
+own inventory export — there's no published npm package yet, so
+`npx @sift/audit-tool` doesn't work until that happens. Until then, this
+is the real path:
+
+```yaml
+# .github/workflows/ad-compliance.yml, in YOUR repo
+name: Ad compliance check
+on: [push]
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: Virerra/Sift
+          path: sift
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - run: npm install
+        working-directory: sift
+
+      # Point this at wherever your own CI produces an inventory export —
+      # a build artifact, a checkout of your own repo alongside this one,
+      # a step earlier in the same job. audit-tool doesn't care how the
+      # file got there, only that it's valid JSON/JSONL matching the
+      # schema in this README.
+      - run: node bin/audit.js /path/to/your-inventory.json --fail-on-flags 0
+        working-directory: sift/apps/audit-tool
+```
+
+This repo's own CI (`.github/workflows/ci.yml` at the root) runs this
+exact tool's test suite — including a fresh-inventory smoke test, not
+just the bundled fixture — on every push, which is the actual ongoing
+proof this stays usable rather than a one-time claim.
+
 ## Library usage
 
 ```js

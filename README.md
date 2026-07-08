@@ -44,9 +44,12 @@ sift/
 │                         narrow — see packages/schema/report.js.
 ├── .github/
 │   ├── ISSUE_TEMPLATE/   Ad-report template — where Export → Report lands
-│   └── workflows/        deploy-parentguide.yml — GitHub Pages can't
-│                          natively serve a monorepo subfolder, so this
-│                          handles that.
+│   └── workflows/        ci.yml runs every workspace's test suite plus
+│                          the addashboard build on every push/PR — the
+│                          ongoing proof things stay working, not just a
+│                          one-time check. deploy-parentguide.yml handles
+│                          GitHub Pages since it can't natively serve a
+│                          monorepo subfolder.
 ├── package.json          Root npm workspaces config (apps/*, packages/*)
 ├── LICENSE                MIT, applies to the whole repo
 └── README.md              this file

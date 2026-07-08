@@ -76,6 +76,31 @@ test("auditInventory summary counts are internally consistent with totalFlagged"
   assert.equal(flagTypeSum, actualFlagCount, "summary.byFlagType should sum to the total number of flag instances");
 });
 
+test("auditInventory correctly evaluates hand-written inventory data it has never seen, not just the bundled fixture", () => {
+  // Deliberately NOT reusing fixtures/sample-inventory.json — a tool that
+  // only works on its own demo data isn't proven to work on anything.
+  const records = [
+    { id: "ad-4471", platform: "tiktok.com", text: "Meet singles near you tonight", ariaLabel: "Sponsored" },
+    { id: "ad-4472", platform: "tiktok.com", text: "25% off summer sandals, free shipping", ariaLabel: "Sponsored" },
+    { id: "ad-4473", platform: "other", text: "Congratulations, you've been selected for a free iPhone!", host: "sketchy-adnet.biz" },
+    { id: "ad-4474", platform: "youtube.com", text: "New cookbook out now — order today" }
+  ];
+
+  const report = auditInventory(records);
+  assert.equal(report.totalScanned, 4);
+  assert.equal(report.totalFlagged, 2);
+
+  const byId = Object.fromEntries(report.results.map((r) => [r.id, r.flags.map((f) => f.type)]));
+  assert.deepEqual(byId["ad-4471"], ["age_mismatch_category"], "dating category correctly caught");
+  assert.deepEqual(byId["ad-4472"], [], "genuinely clean ad correctly left alone");
+  assert.deepEqual(
+    byId["ad-4473"].sort(),
+    ["dark_pattern", "unverified_ad_network"].sort(),
+    "fake-prize dark pattern AND the unrecognized host both caught on the same ad"
+  );
+  assert.deepEqual(byId["ad-4474"], [], "second genuinely clean ad correctly left alone");
+});
+
 // ---------- CLI integration (spawns the real binary) ----------
 
 test("CLI runs against the fixture and exits 0 by default even with flags present", () => {

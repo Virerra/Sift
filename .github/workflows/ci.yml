@@ -1,0 +1,48 @@
+name: CI
+
+# This is the thing that actually keeps "usable" true over time, not just
+# on the day someone verified it by hand. Every workspace's own test
+# suite, run for real on every push — not a re-statement of confidence,
+# an actual re-check.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      # Root install, on purpose — this is a workspace monorepo, and
+      # installing from anywhere else silently breaks package resolution
+      # between packages/* and apps/* (the exact failure mode that broke
+      # the Vercel deploy: an isolated install can't see workspace-local
+      # packages and tries the public registry instead).
+      - run: npm install
+
+      - name: packages/heuristics
+        run: npm test --workspace=@sift/heuristics
+
+      - name: packages/schema
+        run: npm test --workspace=@sift/schema
+
+      - name: apps/adsentinel (sync check — catches a forgotten npm run sync)
+        run: npm test --workspace=adsentinel
+
+      - name: apps/audit-tool
+        run: npm test --workspace=@sift/audit-tool
+
+      - name: apps/addashboard (tests)
+        run: npm test --workspace=addashboard
+
+      - name: apps/addashboard (build)
+        run: npm run build --workspace=addashboard
