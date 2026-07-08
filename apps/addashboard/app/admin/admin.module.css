@@ -1,0 +1,107 @@
+.gate {
+  max-width: 480px;
+  margin: 100px auto;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.wrap {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px 80px;
+}
+
+.wordmark {
+  font-family: "Arial Black", Arial, sans-serif;
+  font-weight: 900;
+  font-size: 24px;
+  margin: 0;
+}
+
+.sub {
+  color: #6b6b6b;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 12px 0 24px;
+}
+
+.form {
+  display: flex;
+  gap: 8px;
+}
+
+.input {
+  flex: 1;
+  padding: 10px 12px;
+  border: 2px solid #111111;
+  border-radius: 6px;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+
+.headerRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 2px solid #111111;
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+
+.bulkRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.btnPrimary, .btnSecondary, .btnDanger, .btnDangerSmall {
+  font-family: Arial, sans-serif;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 9px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid #111111;
+}
+
+.btnPrimary { background: #111111; color: #ffffff; }
+.btnSecondary { background: #ffffff; color: #111111; }
+.btnDanger { background: #ffffff; color: #b3261e; border-color: #b3261e; }
+.btnDangerSmall {
+  composes: btnDanger;
+  padding: 5px 10px;
+  font-size: 12px;
+}
+
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.error {
+  background: #fdecea;
+  border: 1px solid #b3261e;
+  color: #b3261e;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font-size: 13.5px;
+  margin-bottom: 16px;
+}
+
+.empty { color: #6b6b6b; }
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.table th, .table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #d9d9d9;
+}
+
+.table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #6b6b6b;
+}

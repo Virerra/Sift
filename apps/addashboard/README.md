@@ -37,6 +37,29 @@ curl -X POST http://localhost:3000/api/reports -H "Content-Type: application/jso
 }'
 ```
 
+## Moderating bad data
+
+`/admin` is a token-gated panel — lists every individual submission
+(unlike the public dashboard, which only ever shows aggregates) and lets
+you delete a specific report, everything from one platform, or the whole
+dataset.
+
+**One-time setup:** Vercel project → **Settings** → **Environment
+Variables** → add `ADMIN_TOKEN` with a long random value (a password
+generator's output is fine). Redeploy for it to take effect. Without this
+set, every admin route hard-rejects everything — there's no default
+token, no bypass.
+
+Visit `/admin` on your deployment, paste the token in, and the panel
+unlocks. The token lives in `sessionStorage` only — clears when the tab
+closes, never written anywhere permanent.
+
+This is a single shared secret, not an account system — consistent with
+"no accounts required" for everything public-facing, but deletion is the
+one place that principle genuinely can't extend to. An unauthenticated
+public DELETE would let anyone wipe the dataset; one secret known only to
+whoever runs this deployment is the minimal gate that's actually needed.
+
 ## Deploying for real: Vercel + Postgres
 
 1. **Push this repo to GitHub** (already done if you're reading this from
@@ -104,3 +127,20 @@ gives Next no signal that the data changes over time.
   shared instance for anyone running AdSentinel unmodified, not just a
   personal test deployment — keep an eye on Vercel/Postgres usage as
   real traffic shows up, not just at setup time.
+- **Admin auth has no rate limiting either** — same class of gap as the
+  public endpoint, same reasoning: a sufficiently long random
+  `ADMIN_TOKEN` is the mitigation for now.
+
+## Testing
+
+```
+npm test
+```
+
+Two kinds of coverage: `test/admin.test.mjs` runs auth and the
+list/delete data-layer functions directly against the file-backed dev
+store — no server spun up, fast, reliable. (An earlier version of this
+suite spawned a real `next dev` server per test run; it worked but was
+slow and fragile enough to be worth abandoning in favor of testing the
+actual logic directly — the HTTP wiring itself was already verified
+manually via curl against a running server.)

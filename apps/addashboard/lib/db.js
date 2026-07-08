@@ -189,3 +189,87 @@ function shapeStats({ totals, byPlatform, byFlagType, byCategory, childDirectedS
     usingDatabase: Boolean(connectionString)
   };
 }
+
+/**
+ * Admin-only: lists individual submissions (not aggregate stats) so a
+ * moderator can actually see what exists before deleting anything. This
+ * is deliberately NOT exposed through the public GET /api/reports —
+ * that endpoint stays aggregate-only on purpose (see packages/schema).
+ * Grouped by report_id since that's the unit a moderator thinks in
+ * ("delete that one bad submission"), even though the table itself is
+ * flattened to one row per flag.
+ */
+export async function listReports() {
+  const rows = connectionString ? await listReportsFromPostgres() : readDevStore();
+
+  const byReport = new Map();
+  for (const r of rows) {
+    const key = connectionString ? r.report_id : r.reportId;
+    if (!byReport.has(key)) {
+      byReport.set(key, {
+        reportId: key,
+        platform: r.platform,
+        childDirected: connectionString ? r.child_directed : r.childDirected,
+        submittedAt: connectionString ? r.submitted_at : r.submittedAt,
+        flagTypes: []
+      });
+    }
+    byReport.get(key).flagTypes.push(connectionString ? r.flag_type : r.flagType);
+  }
+
+  return [...byReport.values()].sort((a, b) => new Date(b.submittedAt) - new Date(a.submittedAt));
+}
+
+async function listReportsFromPostgres() {
+  await ensureSchema();
+  const db = getSql();
+  return db`
+    SELECT report_id, platform, child_directed, flag_type, submitted_at
+    FROM flag_events
+    ORDER BY submitted_at DESC
+  `;
+}
+
+/**
+ * Admin-only: deletes flag_events rows. Exactly one of reportId /
+ * platform / all should be set — the API route enforces that shape, this
+ * function just trusts it, since it's never called anywhere except that
+ * one admin-gated route.
+ */
+export async function deleteReports({ reportId, platform, all }) {
+  if (connectionString) {
+    await ensureSchema();
+    const db = getSql();
+    if (all) {
+      const result = await db`DELETE FROM flag_events`;
+      return result.count;
+    }
+    if (reportId) {
+      const result = await db`DELETE FROM flag_events WHERE report_id = ${reportId}`;
+      return result.count;
+    }
+    if (platform) {
+      const result = await db`DELETE FROM flag_events WHERE platform = ${platform}`;
+      return result.count;
+    }
+    return 0;
+  }
+
+  const existing = readDevStore();
+  let kept, deletedCount;
+  if (all) {
+    kept = [];
+    deletedCount = existing.length;
+  } else if (reportId) {
+    kept = existing.filter((r) => r.reportId !== reportId);
+    deletedCount = existing.length - kept.length;
+  } else if (platform) {
+    kept = existing.filter((r) => r.platform !== platform);
+    deletedCount = existing.length - kept.length;
+  } else {
+    kept = existing;
+    deletedCount = 0;
+  }
+  writeDevStore(kept);
+  return deletedCount;
+}
